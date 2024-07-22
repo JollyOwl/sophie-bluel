@@ -1,7 +1,7 @@
-import { displayedWorks } from "./displayworks.js";
+import { fetchWorksApi } from "./displayworks.js";
 
 document.addEventListener("DOMContentLoaded", (event) => {
-  fetchCategories();
-  displayedWorks();
+  fetchCategoriesApi();
+  fetchWorksApi();
   clickButton();
 });

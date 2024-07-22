@@ -1,22 +1,26 @@
-let categoriesData = []; // Declare categoriesData in a higher scope
-let worksData = []; // Declare worksData in a higher scope
-let activeCategoryId = [];
+let categoriesData = [];
+let worksData = [];
+let activeCategoryId = []; // Declare activeCategoryId and initialize it to null
 
-export async function fetchCategories() {
+/*  *** DATA FETCHING FUNCTIONs *** */
+
+// Fetch categories from API & add them to buttons
+export async function fetchCategoriesApi() {
   try {
     const response = await fetch("http://localhost:5678/api/categories");
     if (!response.ok) {
       throw new Error("Network response was not ok " + response.statusText);
     }
-    categoriesData = await response.json(); // Assign the fetched data to categoriesData
+    categoriesData = await response.json();
 
     const filtersWrapper = document.querySelector(".filters-wrapper");
-    filtersWrapper.innerHTML = ""; // Clear any existing buttons
+    filtersWrapper.innerHTML = "";
 
     // Add "Tous" button
     const allButton = document.createElement("button");
     allButton.textContent = "Tous";
     allButton.classList.add("button");
+    // apply event handling to default "Tous" button + show all works in the gallery
     clickButton(allButton, showAllWorks);
     filtersWrapper.appendChild(allButton);
 
@@ -25,36 +29,41 @@ export async function fetchCategories() {
       const button = document.createElement("button");
       button.textContent = category.name;
       button.classList.add("button");
-      clickButton(button, () => filterWorks(category.id)); // Attach click event listener
+      // apply event handling + show the gallery with filtered works based on button category
+      clickButton(button, () => showFilteredWorks(category.id));
       filtersWrapper.appendChild(button);
     });
 
-    return categoriesData; // Return the fetched categories
+    return categoriesData;
   } catch (error) {
     console.error("There has been a problem with your fetch operation:", error);
     return []; // Return an empty array in case of error
   }
 }
 
-export async function displayedWorks() {
+// Fetch works from API
+export async function fetchWorksApi() {
   try {
     const response = await fetch("http://localhost:5678/api/works");
     if (!response.ok) {
       throw new Error("Network response was not ok " + response.statusText);
     }
-    worksData = await response.json(); // Assign the fetched data to worksData
+    worksData = await response.json();
 
-    updateGallery(worksData); // Display all works initially
+    populateGallery(worksData); // Display all works initially
 
-    return worksData; // Return the fetched works
+    return worksData;
   } catch (error) {
     console.error("There has been a problem with your fetch operation:", error);
   }
 }
 
-function updateGallery(works) {
+/*  *** GALLERY UPDATE FUNCTION *** */
+
+// called when the page load or when a filter is applied/reset
+function populateGallery(works) {
   const gallery = document.querySelector(".gallery");
-  gallery.innerHTML = ""; // Clear existing works
+  gallery.innerHTML = ""; // clear to avoid the mix of previously displayed works and new filtered works.
 
   works.forEach((work) => {
     const figure = document.createElement("figure");
@@ -73,26 +82,31 @@ function updateGallery(works) {
   });
 }
 
+/*  *** FILTER FUNCTIONS *** */
+
+// function called to reset the filter and show all works.
 function showAllWorks() {
-  activeCategoryIds = []; // Reset active categories
-  updateGallery(worksData); // Show all works
+  activeCategoryId = null; // Reset to empty array to indicate no active filters
+  populateGallery(worksData);
 }
 
-function filterWorks(categoryId) {
+// function called to filter the works based on the selected category
+function showFilteredWorks(categoryId) {
   if (activeCategoryId === categoryId) {
-    // If the clicked category is already active, remove the filter
     activeCategoryId = null;
-    updateGallery(worksData); // Display all works
+    populateGallery(worksData);
   } else {
-    // If a new category is clicked, apply the filter
     activeCategoryId = categoryId;
     const filteredWorks = worksData.filter(
       (work) => work.categoryId === categoryId
     );
-    updateGallery(filteredWorks); // Display filtered works
+    populateGallery(filteredWorks);
   }
 }
 
+/*  *** EVENT HANDLING FUNCTION *** */
+
+// buttons event handling : update .clicked class and call showFilteredWorks or showAllWorks
 export function clickButton(button, filterFunction) {
   button.addEventListener("click", function () {
     // Remove "clicked" class from all buttons
@@ -109,10 +123,10 @@ export function clickButton(button, filterFunction) {
 }
 
 // Call the functions to initiate the fetches
-fetchCategories().then((categories) => {
+fetchCategoriesApi().then((categories) => {
   console.log("Fetched categories data:", categories); // Log categories data after the fetch operation completes
 });
 
-displayedWorks().then((works) => {
+fetchWorksApi().then((works) => {
   console.log("Fetched works data:", works); // Log works data after the fetch operation completes
 });
