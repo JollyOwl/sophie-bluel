@@ -177,6 +177,12 @@ nav li {
 li:hover {
   color: #b1663c;
 }
+a:link,
+a:visited {
+  color: inherit; /* Use the current text color */
+  text-decoration: none; /* Remove the underline */
+}
+
 #introduction {
   display: flex;
   align-items: center;
@@ -202,7 +208,6 @@ li:hover {
 }
 #portfolio h2 {
   text-align: center;
-  margin-bottom: 1em;
 }
 .gallery {
   width: 100%;
@@ -237,6 +242,7 @@ li:hover {
   font-size: 1.2em;
   border: none;
   box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.09);
+  padding: 0px 16px;
 }
 #contact label {
   margin: 2em 0 1em 0;
@@ -263,6 +269,15 @@ footer nav ul {
   margin: 2em;
 }
 
+.wrapper_header {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+
+  align-items: center;
+  flex-direction: row;
+}
+
 /* button */
 .button {
   padding: 16px;
@@ -274,11 +289,25 @@ footer nav ul {
   text-align: center;
   border-radius: 60px;
   border: 1px solid #1d6154;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
 }
 
 .button.clicked {
   background-color: #1d6154;
   color: #fff;
+}
+
+#modifyButton {
+  display: none;
+  font-family: "Work Sans";
+  font-family: 14px;
+  border: none;
+  padding: none;
+  color: black;
+  font-weight: bold;
 }
 
 /* filters */
@@ -297,4 +326,197 @@ footer nav ul {
   gap: 10px;
   justify-content: center;
   padding-bottom: 32px;
+}
+
+/* Log in page */
+#errorMessage {
+  display: none;
+  padding: 24px 44px;
+  margin-top: 44px;
+  background-color: #ffc1c1;
+  color: #ad0808;
+  font-size: 1.125rem;
+  line-height: 135%;
+}
+
+/* modale */
+.modale {
+  position: fixed;
+  font-family: "Work Sans";
+  font-size: 26px;
+  display: none;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  align-content: center;
+  justify-content: center;
+  align-items: center;
+  overflow-x: hidden;
+  z-index: 1;
+  left: 0;
+  top: 0;
+  width: 100vw;
+  height: 100vh;
+  overflow: auto;
+  box-sizing: border-box;
+  background-color: rgb(0, 0, 0);
+  background-color: rgba(0, 0, 0, 0.4);
+}
+
+.modale_container {
+  width: 100%;
+  background-color: white;
+  width: 650px;
+  padding: 54px;
+  margin: auto;
+  position: relative;
+}
+
+.material-symbols-rounded {
+  position: absolute;
+  top: 5%;
+  right: 5%;
+}
+
+.modale_nav {
+  display: flex;
+  justify-content: space-around;
+  padding: 16px;
+}
+
+.modale_galerie {
+  display: flex;
+  flex-direction: column;
+  align-content: center;
+  flex-wrap: nowrap;
+  align-items: center;
+  justify-content: center;
+}
+.modale_button {
+  font-family: "Syne";
+  font-size: 1rem;
+  font-weight: 700;
+  color: white;
+  background-color: #1d6154;
+  padding: 10px 15px;
+  margin: 2em auto;
+  width: 180px;
+  text-align: center;
+  border-radius: 60px;
+  border: none;
+}
+
+.modale_ajoutphoto {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.modale_ajoutphoto > form {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding-top: 24px;
+  font-size: 16px;
+}
+
+#work-form {
+  width: 100%;
+}
+
+#work-image {
+  display: none;
+}
+
+.work-form_wrapper_photoinput {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+  background-color: #e8f1f6;
+  width: 75%;
+  padding: 24px;
+  margin-bottom: 24px;
+}
+
+.modale_wrapper_infos-input {
+  width: 75%;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  box-sizing: border-box;
+}
+
+.modale_wrapper_infos-input > input,
+select {
+  appearance: none; /* Remove default styling */
+  -webkit-appearance: none; /* Remove default styling in WebKit browsers */
+  -moz-appearance: none; /* Remove default styling in Firefox */
+  padding: 0px 16px; /* Adjust padding as needed */
+  margin-top: 16px;
+  margin-bottom: 16px;
+  border: 1px solid #d4dee3;
+  font-size: 16px; /* Adjust font size as needed */
+  color: #b9c2c6;
+  width: 100%;
+  border: 1px solid #d4dee3;
+  height: 44px;
+  box-sizing: border-box;
+}
+
+#button-ajout-image {
+  padding: 8px 16px;
+  background-color: #cbd6dc;
+  border-radius: 24px;
+}
+
+.modale_photos {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  grid-template-rows: repeat(3, 1fr);
+  grid-column-gap: 12px;
+  grid-row-gap: 24px;
+  width: 100%;
+  overflow: hidden;
+}
+
+.workFormImg {
+  height: 100px;
+  width: 100px;
+}
+
+.hide {
+  display: none;
+}
+
+.show {
+  display: flex;
+}
+
+.mini-figure {
+  width: 100%; /* Ensure the figure fills the grid cell */
+  height: auto; /* Adjust height accordingly */
+  margin: 0; /* Remove default margin */
+  box-sizing: border-box; /* Include padding and border in the element's total width and height */
+  position: relative;
+}
+
+.mini-figure img {
+  width: 100%; /* Make the image fill the figure */
+  height: 100%; /* Ensure the image fills the height of the figure */
+  object-fit: cover; /* Maintain the aspect ratio and cover the entire area */
+}
+
+.trash-icon {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  z-index: 1;
+  /* width: 16rem; */
+}
+
+.modale_ajoutphoto {
+  display: none;
 }
