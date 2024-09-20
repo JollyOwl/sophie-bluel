@@ -18,15 +18,22 @@
       rel="stylesheet"
       href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
     />
+
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0"
+    />
     <meta name="description" content="" />
     <link rel="stylesheet" href="./assets/style.css" />
   </head>
   <body>
     <header>
       <h1>Sophie Bluel <span>Architecte d'intérieur</span></h1>
+
       <nav>
         <ul>
           <li>projets</li>
+          a
           <li>contact</li>
           <li><a href="login.html"> login </a></li>
           <li><img src="./assets/icons/instagram.png" alt="Instagram" /></li>
@@ -36,7 +43,9 @@
     <main>
       <div id="modale" class="modale">
         <div id="modaleContainer" class="modale_container">
-          <span class="material-symbols-rounded" id="close">close</span>
+          <span class="material-symbols-rounded close_icon" id="close"
+            >close</span
+          >
           <div class="modale_vues">
             <div class="modale_galerie">
               <p class="heading-style-h2">Galerie photos</p>
@@ -49,7 +58,7 @@
               <p class="heading-style-h2">Ajout photo</p>
               <form id="work-form" method="POST" enctype="multipart/form-data">
                 <div class="work-form_wrapper_photoinput">
-                  <img src="./assets/images/image.png" />
+                  <!-- <img src="./assets/images/image.png" /> TODO See why image.png does not exist-->
                   <label for="work-image" id="button-ajout-image"
                     >+ Ajouter photo</label
                   >
@@ -68,9 +77,9 @@
                   <label for="work-category">Catégorie</label>
                   <select id="work-category" name="work-category" required>
                     <option value="">Selectionner une catégorie...</option>
-                    <option value="painting">Objets</option>
-                    <option value="sculpture">Appartemenets</option>
-                    <option value="photography">Hôtels & restaurants</option>
+                    <option value="1">Objets</option>
+                    <option value="2">Appartements</option>
+                    <option value="3">Hôtels & restaurants</option>
                   </select>
                 </div>
                 <button type="submit" class="modale_button">Valider</button>
@@ -84,7 +93,6 @@
           <img src="./assets/images/sophie-bluel.png" alt="" />
         </figure>
         <article>
-          <div id="myButton" class="button">yoo</div>
           <h2>Designer d'espace</h2>
           <p>
             Je raconte votre histoire, je valorise vos idées. Je vous accompagne
@@ -107,7 +115,7 @@
         <div class="filters-section-wrapper">
           <div class="wrapper_header">
             <h2>Mes Projets</h2>
-            <button id="modifyButton" class="button modify">
+            <button id="modifyButton" class="button modifyButton">
               <span class="material-symbols-outlined"> border_color </span
               >modify
             </button>
