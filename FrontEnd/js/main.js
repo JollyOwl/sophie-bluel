@@ -196,9 +196,14 @@ document.addEventListener("DOMContentLoaded", () => {
   // Function to delete works using event delegation
   function deleteWorks() {
     const modalePhotos = document.getElementById("modale_photos");
+    if (!modalePhotos) {
+      console.error("modale_photos element not found!");
+      return;
+    }
+
     modalePhotos.addEventListener("click", async (event) => {
-      if (event.target.closest(".trashicon")) {
-        const deleteButton = event.target.closest(".trashicon");
+      const deleteButton = event.target.closest(".trashicon");
+      if (deleteButton) {
         const workId = deleteButton.dataset.workId;
         const url = `http://localhost:5678/api/works/${workId}`;
 
@@ -215,24 +220,18 @@ document.addEventListener("DOMContentLoaded", () => {
 
           if (response.ok) {
             console.log("Item Deleted");
-
-            // Remove the deleted work from worksData
             worksData = worksData.filter((work) => work.id != workId);
-
-            // Update the main gallery
             populateGallery(worksData);
-
-            // Optionally, remove the element from the DOM in the modal
             deleteButton.parentElement.remove();
-          } else if (response.status === 401) {
-            console.log("Unauthorized");
-          } else if (response.status === 500) {
-            console.log("Unexpected Behaviour");
           } else {
-            console.log("Error:", response.statusText);
+            console.error(
+              "Delete request failed:",
+              response.status,
+              response.statusText
+            );
           }
         } catch (error) {
-          console.error("Error:", error);
+          console.error("Error during deletion:", error);
         }
       }
     });
@@ -253,18 +252,19 @@ document.addEventListener("DOMContentLoaded", () => {
     workForm.addEventListener("submit", async (event) => {
       event.preventDefault();
 
-      // Crée un nouvel objet FormData
-      const formData = new FormData();
-
-      // Récupère les données du formulaire
+      // Retrieve form data
       const title = document.getElementById("work-name").value;
       const category = document.getElementById("work-category").value;
-      const imageFile = document.getElementById("work-image").files[0]; // Le fichier image
+      const imageFile = document.getElementById("work-image").files[0];
 
-      // Ajoute les données au FormData
+      // Validate image file format and size
+      if (!validateFile(imageFile)) return;
+
+      // Create a new FormData object
+      const formData = new FormData();
       formData.append("title", title);
       formData.append("category", category);
-      formData.append("image", imageFile); // Ajoute l'image
+      formData.append("image", imageFile);
 
       const token = localStorage.getItem("authToken");
 
@@ -273,28 +273,52 @@ document.addEventListener("DOMContentLoaded", () => {
           method: "POST",
           headers: {
             Authorization: `Bearer ${token}`,
-            // 'Content-Type' ne doit pas être défini ici car FormData s'en charge automatiquement
+            // 'Content-Type' should not be set when using FormData
           },
-          body: formData, // Envoie l'objet FormData
+          body: formData,
         });
 
         if (response.ok) {
           const newWork = await response.json();
-          worksData.push(newWork); // Ajoute la nouvelle œuvre aux données
-          populateGallery(worksData); // Met à jour la galerie avec la nouvelle œuvre
-          populateModaleGallery(worksData); // Met à jour la modale avec la nouvelle œuvre
-          modaleAjoutphoto.style.display = "none"; // Ferme la modale d'ajout
-          modaleGalerie.style.display = "flex"; // Affiche la galerie de la modale
+          worksData.push(newWork);
+          populateGallery(worksData);
+          populateModaleGallery(worksData);
+          modaleAjoutphoto.style.display = "none";
+          modaleGalerie.style.display = "flex";
         } else {
-          console.error(
-            "Erreur lors de l'ajout de l'œuvre :",
-            response.statusText
-          );
+          console.error("Error adding work:", response.statusText);
         }
       } catch (error) {
-        console.error("Erreur :", error);
+        console.error("Error:", error);
       }
     });
+  }
+
+  // Validate file format and size
+
+  function validateFile(file) {
+    const maxFileSize = 4 * 1024 * 1024; // 4 MB in bytes
+    const allowedExtensions = ["png", "jpg"];
+    const fileExtension = file.name.split(".").pop().toLowerCase();
+    const errorMessageElement = document.getElementById("error-message"); // Assuming you have an element with this ID
+
+    // Clear previous error messages
+    errorMessageElement.textContent = "";
+
+    // Check for allowed file extensions
+    if (!allowedExtensions.includes(fileExtension)) {
+      errorMessageElement.textContent =
+        "Only .png and .jpg formats are allowed.";
+      return false;
+    }
+
+    // Check for maximum file size
+    if (file.size > maxFileSize) {
+      errorMessageElement.textContent = "File size must not exceed 4 MB.";
+      return false;
+    }
+
+    return true;
   }
 
   /*  *** FILTER FUNCTIONS *** */
